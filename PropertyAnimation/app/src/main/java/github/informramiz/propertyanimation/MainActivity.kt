@@ -101,7 +101,8 @@ class MainActivity : AppCompatActivity() {
     private fun animateBackground() {
         //because there is no propertyValue holder already defined for this so
         //we specify only name and type (color, int) and objectAnimator tries to find matching
-        //property name and type automatically
+        //property name and type automatically.
+        //Note: In case object animator can't find the property then nothing will happen (no crash as well)
         val animator = ObjectAnimator.ofArgb(star.parent, "backgroundColor", Color.BLACK, Color.RED)
         //reverse it
         animator.repeatCount = 1
