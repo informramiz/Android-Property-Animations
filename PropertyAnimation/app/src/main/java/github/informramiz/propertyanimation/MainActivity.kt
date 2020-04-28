@@ -1,13 +1,18 @@
 package github.informramiz.propertyanimation
 
+import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 
@@ -54,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         showerButton.setOnClickListener {
-
+            showerStars()
         }
     }
 
@@ -110,6 +115,52 @@ class MainActivity : AppCompatActivity() {
         animator.duration = 500
         animator.disableViewDuringAnimation(backgroundButton)
         animator.start()
+    }
+
+    private fun showerStars() {
+        val container = star.parent as ViewGroup
+        val newStartView = createView(container.width, container.height, star.width, star.height)
+
+        //add this new view to container
+        container.addView(newStartView)
+
+        //animate star in rotation, randomly perform rotations [1, 3]
+        val rotator = ObjectAnimator.ofFloat(newStartView, View.ROTATION, (Math.random()* (3*360)).toFloat())
+        //we want the rotation to be linear
+        rotator.interpolator = LinearInterpolator()
+
+        //also, animate the start in y-axis using translation
+        val translator = ObjectAnimator.ofFloat(newStartView, View.TRANSLATION_Y, -newStartView.height.toFloat(), container.height + newStartView.height.toFloat())
+        //we want the fall animation to accelerate
+        translator.interpolator = AccelerateInterpolator()
+
+        //group these animators to run simultaneously
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(rotator, translator)
+        //set duration randomly in range [500, 2000]
+        animatorSet.duration = Math.random().toLong() * 1500 + 500
+        animatorSet.doOnEnd {
+            //when animation ends, we don't need the newStarView any longer so remove it
+            container.removeView(newStartView)
+        }
+        animatorSet.start()
+    }
+
+    private fun createView(containerWidth: Int, containerHeight: Int, starWidth: Int, startHeight: Int): View {
+        //create a new view for each click, with random scale and random position in container
+        val randomScale = Math.random().toFloat() * 1.5f + 0.1f
+        val view = AppCompatImageView(this).apply {
+            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            //scale the star in x direction in range [0.1*width, 1.5*width]
+            scaleX = randomScale
+            //scale the star in y direction in range [0.1*height, 1.5*height]
+            scaleY = randomScale
+
+            //also translate it randomly in container x-axis
+            translationX = Math.random().toFloat() * containerWidth
+            setImageResource(R.drawable.ic_star)
+        }
+        return view
     }
 
     private fun ObjectAnimator.disableViewDuringAnimation(view: View) {
