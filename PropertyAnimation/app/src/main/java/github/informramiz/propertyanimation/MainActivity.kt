@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         fadeButton.setOnClickListener {
-
+            fadeStar()
         }
 
         colorizeButton.setOnClickListener {
@@ -86,6 +86,14 @@ class MainActivity : AppCompatActivity() {
         animator.repeatCount = 1
         animator.repeatMode = ObjectAnimator.REVERSE
         animator.disableViewDuringAnimation(scaleButton)
+        animator.start()
+    }
+
+    private fun fadeStar() {
+        val animator = ObjectAnimator.ofFloat(star, View.ALPHA, 0f)
+        animator.repeatCount = 1
+        animator.repeatMode = ObjectAnimator.REVERSE
+        animator.disableViewDuringAnimation(fadeButton)
         animator.start()
     }
 
