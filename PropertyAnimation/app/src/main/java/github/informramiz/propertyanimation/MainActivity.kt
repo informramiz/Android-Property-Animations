@@ -1,6 +1,7 @@
 package github.informramiz.propertyanimation
 
 import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         scaleButton.setOnClickListener {
-
+            scaleStar()
         }
 
         fadeButton.setOnClickListener {
@@ -70,6 +71,21 @@ class MainActivity : AppCompatActivity() {
         animator.repeatCount = 1
         animator.repeatMode = ObjectAnimator.REVERSE
         animator.disableViewDuringAnimation(translateButton)
+        animator.start()
+    }
+
+    private fun scaleStar() {
+        //we need to scale start in both X and Y-axis at the SAME TIME but there
+        //is no single property that can do that so we have to create it ourselves
+        val scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, 4f)
+        val scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 4f)
+        //now combine these 2 properties into a single object animator
+        val animator = ObjectAnimator.ofPropertyValuesHolder(star, scaleX, scaleY)
+        //we want the animation to reverse itself so that at the end star is in its original
+        //shape and size
+        animator.repeatCount = 1
+        animator.repeatMode = ObjectAnimator.REVERSE
+        animator.disableViewDuringAnimation(scaleButton)
         animator.start()
     }
 
