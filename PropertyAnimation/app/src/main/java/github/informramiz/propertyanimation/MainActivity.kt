@@ -2,6 +2,7 @@ package github.informramiz.propertyanimation
 
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -17,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var translateButton: Button
     lateinit var scaleButton: Button
     lateinit var fadeButton: Button
-    lateinit var colorizeButton: Button
+    lateinit var backgroundButton: Button
     lateinit var showerButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         translateButton = findViewById(R.id.translateButton)
         scaleButton = findViewById(R.id.scaleButton)
         fadeButton = findViewById(R.id.fadeButton)
-        colorizeButton = findViewById(R.id.backgroundButton)
+        backgroundButton = findViewById(R.id.backgroundButton)
         showerButton = findViewById(R.id.showerButton)
 
         rotateButton.setOnClickListener {
@@ -48,8 +49,8 @@ class MainActivity : AppCompatActivity() {
             fadeStar()
         }
 
-        colorizeButton.setOnClickListener {
-
+        backgroundButton.setOnClickListener {
+            animateBackground()
         }
 
         showerButton.setOnClickListener {
@@ -94,6 +95,16 @@ class MainActivity : AppCompatActivity() {
         animator.repeatCount = 1
         animator.repeatMode = ObjectAnimator.REVERSE
         animator.disableViewDuringAnimation(fadeButton)
+        animator.start()
+    }
+
+    private fun animateBackground() {
+        val animator = ObjectAnimator.ofArgb(star.parent, "backgroundColor", Color.BLACK, Color.RED)
+        //reverse it
+        animator.repeatCount = 1
+        animator.repeatMode = ObjectAnimator.REVERSE
+        animator.duration = 500
+        animator.disableViewDuringAnimation(backgroundButton)
         animator.start()
     }
 
