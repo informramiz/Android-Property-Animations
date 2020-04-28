@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         translateButton.setOnClickListener {
-            translateStart()
+            translateStar()
         }
 
         scaleButton.setOnClickListener {
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         animator.start()
     }
 
-    private fun translateStart() {
+    private fun translateStar() {
         val animator = ObjectAnimator.ofFloat(star, View.TRANSLATION_X, 200f)
         //after first animation is done, repeat it but this time in reverse direction
         //so that the start comes back to its original position
