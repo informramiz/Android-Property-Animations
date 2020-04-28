@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.animation.addListener
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 
@@ -60,8 +59,12 @@ class MainActivity : AppCompatActivity() {
     private fun rotateStar() {
         val animator = ObjectAnimator.ofFloat(star, View.ROTATION, -360f, 0f)
         animator.duration = 1000
-        animator.doOnStart { rotateButton.isEnabled = false }
-        animator.doOnEnd { rotateButton.isEnabled = true }
+        animator.disableViewDuringAnimation(rotateButton)
         animator.start()
+    }
+
+    private fun ObjectAnimator.disableViewDuringAnimation(view: View) {
+        doOnStart { view.isEnabled = false }
+        doOnEnd { view.isEnabled = true }
     }
 }
